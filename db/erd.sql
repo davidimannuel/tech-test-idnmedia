@@ -4,8 +4,6 @@ DROP TABLE player_missions;
 DROP TABLE players;
 DROP TABLE missions;
 
-ALTER SEQUENCE missions_id_seq RESTART WITH 1;
-
 CREATE OR REPLACE FUNCTION update_modified_column() RETURNS TRIGGER AS $$ 
 BEGIN 
   NEW.updated_at = now();
@@ -28,13 +26,19 @@ CREATE TRIGGER players BEFORE
 UPDATE
 	ON players FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
 
- 
+-- users
+-- $2a$04$n.yc29qrd7AIFksxjfMOOeBWxJW//ZnRpPEfjf/VCCxvTRm5601Ry = Bcrypt(secret123)
+INSERT INTO players 
+  VALUES (1, 'Player 1', 'player1@gmail.com', '$2a$04$n.yc29qrd7AIFksxjfMOOeBWxJW//ZnRpPEfjf/VCCxvTRm5601Ry', 0, NOW(), 'system', NOW(),'system');
+
+ALTER SEQUENCE players_id_seq RESTART WITH 2;
 
 CREATE TABLE missions (
 	id SERIAL PRIMARY KEY NOT NULL,
 	title TEXT NOT NULL CHECK (char_length(title) <= 256),
 	description TEXT NOT NULL CHECK (char_length(description) <= 256),
 	gold_bounty NUMERIC(20,6) NOT NULL,
+	deadline_second INTEGER NOT NULL, -- second
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by TEXT NOT NULL,
 	updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -50,6 +54,7 @@ CREATE TABLE player_missions (
 	player_id INTEGER NOT NULL REFERENCES players(id),
 	mission_id INTEGER NOT NULL REFERENCES missions(id),
 	status TEXT NOT NULL CHECK (char_length(status) <= 256),
+    deadline_time TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	created_by TEXT NOT NULL,
 	updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,

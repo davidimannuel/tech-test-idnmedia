@@ -17,9 +17,9 @@ func NewPostgreRepository(db *sql.DB) Repository {
 }
 
 func (repo *postgreRepository) Create(ctx context.Context, m PlayerMissionModel) (lastID int, err error) {
-	sql := ` INSERT INTO player_missions (player_id, mission_id, status, created_by, updated_by)
-	VALUES ($1, $2, $3, $4, $5) RETURNING id`
-	err = repo.db.QueryRow(sql, m.PlayerId, m.MissionId, m.Status, m.CreatedBy, m.UpdatedBy).Scan(&lastID)
+	sql := ` INSERT INTO player_missions (player_id, mission_id, status, deadline_time, created_by, updated_by)
+	VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
+	err = repo.db.QueryRow(sql, m.PlayerId, m.MissionId, m.Status, m.DeadlineTime, m.CreatedBy, m.UpdatedBy).Scan(&lastID)
 
 	return
 }
@@ -46,7 +46,7 @@ func (repo *postgreRepository) Delete(ctx context.Context, id int) (err error) {
 }
 
 func (repo *postgreRepository) FindAllByPlayerID(ctx context.Context, playerId int) (res []PlayerMissionModel, err error) {
-	sql := ` SELECT pm.id, pm.player_id, pm.mission_id, pm.status, pm.created_at, pm.created_by, pm.updated_at, pm.updated_by,
+	sql := ` SELECT pm.id, pm.player_id, pm.mission_id, pm.status, pm.deadline_time, pm.created_at, pm.created_by, pm.updated_at, pm.updated_by,
 	m.title, m.description, m.gold_bounty
 	FROM player_missions pm
 	JOIN missions m ON m.id = pm.mission_id
@@ -58,7 +58,7 @@ func (repo *postgreRepository) FindAllByPlayerID(ctx context.Context, playerId i
 	defer rows.Close()
 	var temp PlayerMissionModel
 	for rows.Next() {
-		err = rows.Scan(&temp.Id, &temp.PlayerId, &temp.MissionId, &temp.Status, &temp.CreatedAt, &temp.CreatedBy, &temp.UpdatedAt, &temp.UpdatedBy,
+		err = rows.Scan(&temp.Id, &temp.PlayerId, &temp.MissionId, &temp.Status, &temp.DeadlineTime, &temp.CreatedAt, &temp.CreatedBy, &temp.UpdatedAt, &temp.UpdatedBy,
 			&temp.MissionTitle, &temp.MissionDescription, &temp.MissionGoldBounty)
 		if err != nil {
 			return
@@ -70,13 +70,13 @@ func (repo *postgreRepository) FindAllByPlayerID(ctx context.Context, playerId i
 }
 
 func (repo *postgreRepository) FindOneByPlayerIDAndMissionID(ctx context.Context, playerId, missionId int) (res PlayerMissionModel, err error) {
-	sql := ` SELECT pm.id, pm.player_id, pm.mission_id, pm.status, pm.created_at, pm.created_by, pm.updated_at, pm.updated_by,
+	sql := ` SELECT pm.id, pm.player_id, pm.mission_id, pm.status, pm.deadline_time, pm.created_at, pm.created_by, pm.updated_at, pm.updated_by,
 	m.title, m.description, m.gold_bounty
 	FROM player_missions pm
 	JOIN missions m ON m.id = pm.mission_id
 	WHERE pm.player_id =  $1 AND m.id = $2 LIMIT 1`
 
-	err = repo.db.QueryRowContext(ctx, sql, playerId, missionId).Scan(&res.Id, &res.PlayerId, &res.MissionId, &res.Status, &res.CreatedAt, &res.CreatedBy, &res.UpdatedAt, &res.UpdatedBy,
+	err = repo.db.QueryRowContext(ctx, sql, playerId, missionId).Scan(&res.Id, &res.PlayerId, &res.MissionId, &res.Status, &res.DeadlineTime, &res.CreatedAt, &res.CreatedBy, &res.UpdatedAt, &res.UpdatedBy,
 		&res.MissionTitle, &res.MissionDescription, &res.MissionGoldBounty)
 
 	return

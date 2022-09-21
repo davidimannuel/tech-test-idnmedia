@@ -3,6 +3,7 @@ package player_mission
 import (
 	"context"
 	"idnmedia/repositories"
+	"time"
 )
 
 type Repository interface {
@@ -14,10 +15,11 @@ type Repository interface {
 }
 
 type PlayerMissionModel struct {
-	Id        int
-	PlayerId  int
-	MissionId int
-	Status    string
+	Id           int
+	PlayerId     int
+	MissionId    int
+	Status       string
+	DeadlineTime *time.Time
 	repositories.BaseModel
 
 	MissionTitle       string

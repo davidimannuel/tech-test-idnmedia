@@ -26,9 +26,10 @@ func (uc *usecase) Create(ctx context.Context, req *MissionEntity) (res MissionE
 	}
 	res = *req
 	res.Id, err = uc.missionRepo.Create(ctx, mission.MissionModel{
-		Title:       req.Title,
-		Description: req.Description,
-		GoldBounty:  req.GoldBounty,
+		Title:          req.Title,
+		Description:    req.Description,
+		GoldBounty:     req.GoldBounty,
+		DeadlineSecond: req.DeadlineSecond,
 		BaseModel: repositories.BaseModel{
 			CreatedBy: playerCtx.Email,
 			UpdatedBy: playerCtx.Email,
@@ -57,10 +58,11 @@ func (uc *usecase) FindAllPagination(ctx context.Context, page, limit int) (res 
 
 	for _, d := range data {
 		res = append(res, MissionEntity{
-			Id:          d.Id,
-			Title:       d.Title,
-			Description: d.Description,
-			GoldBounty:  d.GoldBounty,
+			Id:             d.Id,
+			Title:          d.Title,
+			Description:    d.Description,
+			GoldBounty:     d.GoldBounty,
+			DeadlineSecond: d.DeadlineSecond,
 			BaseEntity: usecases.BaseEntity{
 				CreatedAt: d.CreatedAt,
 				CreatedBy: d.CreatedBy,
@@ -82,10 +84,11 @@ func (uc *usecase) FindOneByID(ctx context.Context, id int) (res MissionEntity, 
 	}
 
 	res = MissionEntity{
-		Id:          data.Id,
-		Title:       data.Title,
-		Description: data.Description,
-		GoldBounty:  data.GoldBounty,
+		Id:             data.Id,
+		Title:          data.Title,
+		Description:    data.Description,
+		GoldBounty:     data.GoldBounty,
+		DeadlineSecond: data.DeadlineSecond,
 		BaseEntity: usecases.BaseEntity{
 			CreatedAt: data.CreatedAt,
 			CreatedBy: data.CreatedBy,

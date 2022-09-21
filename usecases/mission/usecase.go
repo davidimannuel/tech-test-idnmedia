@@ -12,9 +12,10 @@ type Usecase interface {
 }
 
 type MissionEntity struct {
-	Id          int
-	Title       string
-	Description string
-	GoldBounty  float64
+	Id             int
+	Title          string
+	Description    string
+	GoldBounty     float64
+	DeadlineSecond int
 	usecases.BaseEntity
 }

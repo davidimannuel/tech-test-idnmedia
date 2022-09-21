@@ -37,6 +37,7 @@ func (ctrl *httpController) FindAll(w http.ResponseWriter, r *http.Request) {
 			MissionDescription: v.MissionDescription,
 			MissionGoldBounty:  v.MissionGoldBounty,
 			Status:             v.Status,
+			DeadlineTime:       v.DeadlineTime,
 			CreatedAt:          v.CreatedAt,
 			CreatedBy:          v.CreatedBy,
 			UpdatedAt:          v.UpdatedAt,
@@ -64,28 +65,12 @@ func (ctrl *httpController) Assign(w http.ResponseWriter, r *http.Request) {
 	res := PlayerMissionResponse{
 		MissionId:          result.MissionId,
 		Status:             result.Status,
+		DeadlineTime:       result.DeadlineTime,
 		MissionTitle:       result.MissionTitle,
 		MissionDescription: result.MissionDescription,
 		MissionGoldBounty:  result.MissionGoldBounty,
 	}
 	controllers.WriteResponse(w, http.StatusOK, "", res, nil)
-}
-
-func (ctrl *httpController) Progess(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
-	missionId, err := strconv.Atoi(mux.Vars(r)["missionId"])
-	if err != nil {
-		controllers.WriteResponse(w, http.StatusBadRequest, err.Error(), nil, nil)
-	}
-
-	err = ctrl.playerMissionUc.Progress(ctx, missionId)
-	if err != nil {
-		controllers.WriteResponse(w, http.StatusInternalServerError, err.Error(), nil, nil)
-		return
-	}
-
-	controllers.WriteResponse(w, http.StatusOK, "", nil, nil)
 }
 
 func (ctrl *httpController) Complete(w http.ResponseWriter, r *http.Request) {

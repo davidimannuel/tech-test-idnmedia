@@ -31,9 +31,10 @@ func (ctrl *httpController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	result, err := ctrl.missionUc.Create(ctx, &mission.MissionEntity{
-		Title:       req.Title,
-		Description: req.Description,
-		GoldBounty:  req.GoldBounty,
+		Title:          req.Title,
+		Description:    req.Description,
+		GoldBounty:     req.GoldBounty,
+		DeadlineSecond: req.DeadlineSecond,
 	})
 	if err != nil {
 		controllers.WriteResponse(w, http.StatusInternalServerError, err.Error(), nil, nil)
@@ -41,14 +42,15 @@ func (ctrl *httpController) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	res := MissionResponse{
-		Id:          result.Id,
-		Title:       result.Title,
-		Description: result.Description,
-		GoldBounty:  result.GoldBounty,
-		CreatedAt:   result.CreatedAt,
-		CreatedBy:   result.CreatedBy,
-		UpdatedAt:   result.UpdatedAt,
-		UpdatedBy:   result.UpdatedBy,
+		Id:             result.Id,
+		Title:          result.Title,
+		Description:    result.Description,
+		GoldBounty:     result.GoldBounty,
+		DeadlineSecond: result.DeadlineSecond,
+		CreatedAt:      result.CreatedAt,
+		CreatedBy:      result.CreatedBy,
+		UpdatedAt:      result.UpdatedAt,
+		UpdatedBy:      result.UpdatedBy,
 	}
 	controllers.WriteResponse(w, http.StatusOK, "", res, nil)
 }
@@ -65,14 +67,15 @@ func (ctrl *httpController) FindAllPagination(w http.ResponseWriter, r *http.Req
 	res := []MissionResponse{}
 	for _, v := range result {
 		res = append(res, MissionResponse{
-			Id:          v.Id,
-			Title:       v.Title,
-			Description: v.Description,
-			GoldBounty:  v.GoldBounty,
-			CreatedAt:   v.CreatedAt,
-			CreatedBy:   v.CreatedBy,
-			UpdatedAt:   v.UpdatedAt,
-			UpdatedBy:   v.UpdatedBy,
+			Id:             v.Id,
+			Title:          v.Title,
+			Description:    v.Description,
+			GoldBounty:     v.GoldBounty,
+			DeadlineSecond: v.DeadlineSecond,
+			CreatedAt:      v.CreatedAt,
+			CreatedBy:      v.CreatedBy,
+			UpdatedAt:      v.UpdatedAt,
+			UpdatedBy:      v.UpdatedBy,
 		})
 	}
 	p := controllers.Pagination{

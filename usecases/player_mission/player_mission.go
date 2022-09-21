@@ -10,6 +10,7 @@ import (
 	playerMission "idnmedia/repositories/player_mission"
 	"idnmedia/usecases"
 	"idnmedia/utils"
+	"time"
 )
 
 type usecase struct {
@@ -43,10 +44,11 @@ func (uc *usecase) FindAll(ctx context.Context) (res []PlayerMissionEntity, err 
 
 	for _, d := range data {
 		res = append(res, PlayerMissionEntity{
-			Id:        d.Id,
-			PlayerId:  d.PlayerId,
-			MissionId: d.MissionId,
-			Status:    d.Status,
+			Id:           d.Id,
+			PlayerId:     d.PlayerId,
+			MissionId:    d.MissionId,
+			Status:       d.Status,
+			DeadlineTime: d.DeadlineTime,
 			BaseEntity: usecases.BaseEntity{
 				CreatedAt: d.CreatedAt,
 				CreatedBy: d.CreatedBy,
@@ -78,6 +80,8 @@ func (uc *usecase) Assign(ctx context.Context, missionID int) (res PlayerMission
 		return
 	}
 
+	deadlineTime := time.Now().Add(time.Duration(mission.DeadlineSecond) * time.Second)
+
 	pm, err := uc.playerMissionRepo.FindOneByPlayerIDAndMissionID(ctx, playerCtx.Id, missionID)
 	if err != nil && err != sql.ErrNoRows {
 		utils.LogError(ctx, utils.FnTrace(), "error get player mission")
@@ -91,9 +95,10 @@ func (uc *usecase) Assign(ctx context.Context, missionID int) (res PlayerMission
 	}
 
 	lastId, err := uc.playerMissionRepo.Create(ctx, playerMission.PlayerMissionModel{
-		PlayerId:  playerCtx.Id,
-		MissionId: missionID,
-		Status:    constants.PLAYER_MISSION_STATUS_PENDING,
+		PlayerId:     playerCtx.Id,
+		MissionId:    missionID,
+		Status:       constants.PLAYER_MISSION_STATUS_IN_PROGESS,
+		DeadlineTime: &deadlineTime,
 		BaseModel: repositories.BaseModel{
 			CreatedBy: playerCtx.Email,
 			UpdatedBy: playerCtx.Email,
@@ -104,44 +109,37 @@ func (uc *usecase) Assign(ctx context.Context, missionID int) (res PlayerMission
 		return
 	}
 
+	go func(playerId, missionId int) { // go routine for update expired mission
+		for deadlineTime.After(time.Now()) {
+			// block process until deadline
+		}
+		ctx := context.TODO()
+		utils.LogInfo(ctx, "[goroutine check expired task]", "runnning expired task check")
+		playerMission, err := uc.playerMissionRepo.FindOneByPlayerIDAndMissionID(ctx, playerId, missionId)
+		if err != nil {
+			utils.LogError(ctx, "[goroutine check expired task]", "error get player mission %v", err)
+		}
+
+		if playerMission.Status == constants.PLAYER_MISSION_STATUS_IN_PROGESS {
+			err = uc.playerMissionRepo.UpdateStatus(ctx, playerMission.Id, constants.PLAYER_MISSION_STATUS_EXPIRED)
+			if err != nil {
+				utils.LogError(ctx, "[goroutine check expired task]", "error udpate status player mission %v", err)
+			}
+		} else {
+			utils.LogInfo(ctx, "[goroutine check expired task]", "task already completed")
+		}
+		utils.LogInfo(ctx, "[goroutine check expired task]", "runnning expired task check sucessfully")
+
+	}(playerCtx.Id, missionID)
+
 	res = PlayerMissionEntity{
 		Id:                 lastId,
 		PlayerId:           playerCtx.Id,
 		MissionId:          missionID,
-		Status:             constants.PLAYER_MISSION_STATUS_PENDING,
+		Status:             constants.PLAYER_MISSION_STATUS_IN_PROGESS,
+		DeadlineTime:       &deadlineTime,
 		MissionTitle:       mission.Title,
 		MissionDescription: mission.Description,
-	}
-
-	return
-}
-
-func (uc *usecase) Progress(ctx context.Context, missionID int) (err error) {
-	playerCtx, err := utils.GetCtxPLayer(ctx)
-	if err != nil {
-		utils.LogError(ctx, utils.FnTrace(), "error get ctx player")
-		return
-	}
-
-	playerMission, err := uc.playerMissionRepo.FindOneByPlayerIDAndMissionID(ctx, playerCtx.Id, missionID)
-	if err != nil {
-		utils.LogError(ctx, utils.FnTrace(), "error get player mission")
-		if err == sql.ErrNoRows {
-			err = utils.ErrDataNotFound
-		}
-		return
-	}
-
-	if playerMission.Status != constants.PLAYER_MISSION_STATUS_PENDING {
-		err = utils.ErrInvalidMissionStatus
-		utils.LogError(ctx, utils.FnTrace(), "invalid mission status %v", playerMission.Status)
-		return
-	}
-
-	err = uc.playerMissionRepo.UpdateStatus(ctx, playerMission.Id, constants.PLAYER_MISSION_STATUS_IN_PROGESS)
-	if err != nil {
-		utils.LogError(ctx, utils.FnTrace(), "error udpate status player mission")
-		return
 	}
 
 	return
@@ -160,6 +158,12 @@ func (uc *usecase) Complete(ctx context.Context, missionID int) (res PlayerMissi
 		if err == sql.ErrNoRows {
 			err = utils.ErrDataNotFound
 		}
+		return
+	}
+
+	if time.Now().After(*playerMission.DeadlineTime) || playerMission.Status == constants.PLAYER_MISSION_STATUS_EXPIRED {
+		err = utils.ErrExpiredMission
+		utils.LogError(ctx, utils.FnTrace(), "expired mission %v", playerMission.DeadlineTime)
 		return
 	}
 

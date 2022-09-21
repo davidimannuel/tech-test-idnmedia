@@ -83,7 +83,6 @@ func main() {
 	apiPlayerMission.Use(jwt.MuxMiddleware)
 	apiPlayerMission.HandleFunc("", playerMissionCtrl.FindAll).Methods(http.MethodGet)
 	apiPlayerMission.HandleFunc("/missionId/{missionId}", playerMissionCtrl.Assign).Methods(http.MethodPost)
-	apiPlayerMission.HandleFunc("/missionId/{missionId}/progess", playerMissionCtrl.Progess).Methods(http.MethodPost)
 	apiPlayerMission.HandleFunc("/missionId/{missionId}/complete", playerMissionCtrl.Complete).Methods(http.MethodPost)
 
 	srv := http.Server{
