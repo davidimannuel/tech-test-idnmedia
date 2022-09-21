@@ -79,7 +79,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOjEsIkVtYWlsIjoicGxheWVyMUBnbWFpbC5jb20iLCJleHAiOjE2NjM3NTc3NDV9.4GLSB1PuZizeHG2YfDHA6b7wLcUtiIO8XIgo8X6Z_FI",
+									"value": "{{token}}",
 									"type": "string"
 								}
 							]
@@ -88,7 +88,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"player1@gmail.com\",\n    \"description\": \"secret123\"\n}",
+							"raw": "{\n    \"title\": \"mission 4\",\n    \"description\": \"test\",\n    \"goldBounty\": 20,\n    \"deadlineSecond\": 20\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -253,53 +253,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "10"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Progess",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"player1@gmail.com\",\n    \"description\": \"secret123\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/v1/playerMission/missionId/:id/progess",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"v1",
-								"playerMission",
-								"missionId",
-								":id",
-								"progess"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "10"
+									"value": "4"
 								}
 							]
 						}
@@ -345,7 +299,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "10"
+									"value": "4"
 								}
 							]
 						}

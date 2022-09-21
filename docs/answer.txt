@@ -1,0 +1,45 @@
+How do you work with uncertainty? Please elaborate and give examples.
+# saya akan aktif mencari informasi terhadap pekerjaan yg tidak pasti tersebut, misal ada development fitur dari handover project/ legacy project 
+saya akan mencari dokumen terkait projcet itu, jika masih belum jelas saya akan mencari PIC project tersebut jika PIC sudah tidak ada 
+maka langkah terakhir adalah membaca melalui "code" project tersebut dan mendiskusikan dengan atasan
+
+What is an ideal day looks like to you?  
+# meeting seperlunya mungkin maksimal 2 jam, setelah itu digunakan hal yg produktif seperti mengertakan task
+
+Why do you like the role?  
+# sebagai Backend Engineer saya sangat "excited" dengan namanya sebuah sistem, saya selalu sengan belajar sebuah sistem, dan mengetahui sebuah alur sistem
+
+If you are given the freedom to work on any project you like, what is it?  
+# pada dasarnya saya selalu excited dengan project apapun itu selama project itu bisa memberi dampak yang besar 
+dalam hal kebaikan seperti membantu kehidupan sehari" dll
+
+Who is your inspiration? and why?
+# pembuat komputer, pembuat bahasa pemrogaman, pembuat teknologi baru walaupun tidak tahu namanya, saya selalu kagum kepada mereka,
+kenapa ?, karena saat ini saya masih belum bisa di level mereka, walaupun sudah di level mereka saya tetap selalu kagum karena mereka motivasi saya
+
+What do you do for fun?  
+# mendengarkan musik, bermain alat musik
+
+What do you think a good team member should have?  
+# saling membantu dalam kesusahan , tidak "toxic", saling membangun, saling menasihati, tahu kapan waktunya serius kapan waktunya bercanda
+
+What motivates you the most?  
+# penemu teknologi baru
+
+What is your approach in a team project? How do you prioritize things?  
+# menentukan lingkup pekerjaan, menetukan resource, menentukan deadline
+
+Why should we hire and ask you to be part of IDN Media? What makes you special?
+# saya selalu "excited" dalam belajar, dan saya juga mudah berkomunikasi dengan org baru, saya juga mudah beradaptasi dengan lingkungan baru
+
+What are some areas or skills that you want to improve and to learn more?  
+# management waktu, komunikasi dengan b. inggris, pengenalan dan pengembangan sistem
+
+How do you want IDN (or me) to support your personal goal?  
+# kursus untuk belajar
+
+If you are given the role, please explain your 3-month plan.
+# 1. pelajari project yg ada
+  2. cari hal apa yg bisa diimprove dari project yg sudah ada
+  3. jika ada akan saya diskusikan dengan atasan
+  4. jika menemukan suatu solusi / improvement , maka akan saya diskusikan dengan atasan lagi agar tereksekusi dengan baik
