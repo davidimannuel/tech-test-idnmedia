@@ -1,0 +1,12 @@
+Sebagai seorang Backend Engineer anda memiliki tanggung jawab dan kewajiban untuk
+membuat API dan design Quest system sebuah game, dimana quest tersebut bisa memiliki 1
+atau beberapa misi dan rewards yang berupa currency Gold. dan juga ada time limit / durasi
+dari sebuah misi tersebut. Dalam technical test interview ini.
+Success kriteria Fitur / API yang akan di pakai team frontend sebagai berikut:
+
+- informasi User/Player punya misi apa saja & berapa gold yang dimiliki
+- Harus bisa melakukan complete mission
+- Harus bisa melakukan melihat misi yang sudah selesai
+- Harus bisa melihat progress dari sebuah misi
+
+
